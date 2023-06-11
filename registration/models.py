@@ -14,7 +14,7 @@ class Profile(models.Model):
 @receiver(post_save, sender=User)
 def ensure_profile_exist(sender, instance, **kwargs):
     if kwargs.get("created", False):
-        Profile.object.get_or_create(user=instance)
+        Profile.objects.get_or_create(user=instance)
         print("Se acaba de crear un usuario y su perfil enlazado")
 
 #Señal que manda una función que ejecuta un código
