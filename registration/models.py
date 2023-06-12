@@ -2,14 +2,23 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+
+#Funcion para solo almacenar la foto recuiente y la antugua eliminarla
+def custom_upload_to(instance, filename):
+    old_instance = Profile.objects.get(pk=instance.pk) #recuperar la instancia de como estaba justo antes de guardarla
+    old_instance.avatar.delete()
+    return 'profiles/' + filename
 # Create your models here.
 #Se importara el usuario para entrar al profile
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    avatar = models.ImageField(upload_to='profiles', null=True, blank='True')
+    avatar = models.ImageField(upload_to=custom_upload_to, null=True, blank='True')
     bio = models.TextField(null=True, blank=True)
     link = models.URLField(max_length=200, null=True, blank=True)
 
+#Ordenaci'on del contenido
+    class Meta:
+        ordering = ['user__username']
 #Esto es para checar lo del regitro de cuenta y esta cuenta sin uso
 @receiver(post_save, sender=User)
 def ensure_profile_exist(sender, instance, **kwargs):
