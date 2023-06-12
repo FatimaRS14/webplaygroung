@@ -42,10 +42,12 @@ class ThreadTestCase(TestCase):
         self.thread.messages.add(message1, message2, message3)
         self.assertEqual(len(self.thread.messages.all()), 2)
 
+#Funcion para la administración 
     def test_find_thread_with_custom_manager(self):
         self.thread.users.add(self.user1, self.user2)
-        thread = Thread.objects.find(self.user1,self.user2)
+        thread = Thread.objects.find(self.user1,self.user2) 
         self.assertEqual(self.thread, thread)
+        #Todo esto devuelve un objeto
 
     def test_find_or_create_thread_with_custom_manager(self):
         self.thread.users.add(self.user1, self.user2)
